@@ -1,0 +1,82 @@
+--Bonusové cvičení COVID-19
+
+--1. úkol: Ukažte všechny záznamy z tabulky covid19_basic.
+SELECT *
+FROM covid19_basic cb 
+
+--2. úkol: Ukažte jen prvních 20 záznamů z tabulky covid19_basic.
+SELECT *
+FROM covid19_basic cb 
+LIMIT 20
+
+--3. úkol: Seřaďte celou tabulku covid19_basic vzestupně podle sloupce date.
+SELECT *
+FROM covid19_basic cb 
+ORDER BY cb."date" 
+
+--4. úkol: Seřaďte celou tabulku covid19_basic sestupně podle sloupce date.
+SELECT *
+FROM covid19_basic cb 
+ORDER BY cb."date" DESC
+
+--5. úkol: Vyberte jen sloupec country z tabulky covid19_basic.
+SELECT country
+FROM covid19_basic cb 
+
+--6. úkol: Vyberte jen sloupce country a date z tabulky covid19_basic.
+SELECT country
+, date
+FROM covid19_basic cb 
+
+--7. úkol: Vyberte z tabulky covid19_basic jen záznamy s Rakouskem (Austria).
+SELECT *
+FROM covid19_basic cb 
+WHERE country = 'Austria'
+
+--8. úkol: Vyberte jen sloupce country, date a confirmed pro Rakousko z tabulky covid19_basic.
+SELECT country
+, date
+, confirmed
+FROM covid19_basic cb 
+WHERE country = 'Austria'
+
+--9. úkol: Vyberte všechny sloupce k datu 30. 8. 2020 z tabulky covid19_basic.
+SELECT *
+FROM covid19_basic cb 
+WHERE date = '2020-08-30'
+
+--10. úkol: Vyberte všechny sloupce k datu 30. 8. 2020 v České republice z tabulky covid19_basic.
+SELECT *
+FROM covid19_basic cb 
+WHERE date = '2020-08-30' AND country = 'Czechia'
+
+--11. úkol: Vyberte všechny sloupce pro Českou republiku a Rakousko z tabulky covid19_basic.
+SELECT *
+FROM covid19_basic cb 
+WHERE country = 'Austria' OR country = 'Czechia'
+
+--12. úkol: Vyberte všechny sloupce z covid19_basic, kde počet nakažených je roven 1 000, nebo 100 000.
+SELECT *
+FROM covid19_basic cb 
+WHERE confirmed = 1000 OR confirmed = 100000
+
+--13. úkol: Vyberte všechny sloupce z tabulky covid19_basic, ve kterých je počet nakažených mezi 10 a 20 a navíc pouze v den 30. 8. 2020.
+SELECT *
+FROM covid19_basic cb 
+WHERE confirmed >=10 and confirmed <= 20 AND date = '2020-08-30'
+
+--14. úkol: Vyberte všechny sloupce z covid19_basic, u kterých je počet nakažených větší než jeden milion dne 15. 8. 2020.
+SELECT *
+FROM covid19_basic cb 
+WHERE confirmed > 1000000 AND date = '2020-08-15'
+
+--15. úkol: Vyberte sloupce date, country a confirmed v Anglii a Francii z tabulky covid19_basic a seřaďte je sestupně podle data.
+SELECT
+   date,
+   country,
+   confirmed
+FROM covid19_basic
+WHERE country = 'United Kingdom' OR country = 'France'
+ORDER BY date DESC
+
+--16. úkol: Vyberte z tabuky covid19_basic_differences přírůstky nakažených v České republice v září 2020.
