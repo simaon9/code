@@ -1,0 +1,195 @@
+/*
+ *Cvičení: SELECT, ORDER BY a LIMIT
+ */
+
+--úkol 1
+SELECT * FROM healthcare_provider hp;
+
+--úkol 2
+SELECT name, provider_type  
+FROM healthcare_provider
+
+--úkol 3
+SELECT name, provider_type  
+FROM healthcare_provider
+LIMIT 20
+
+--úkol 4
+SELECT region_code 
+FROM healthcare_provider
+ORDER BY region_code ASC
+
+--úkol 5
+SELECT 
+name
+	, region_code
+	, district_code
+FROM healthcare_provider
+ORDER BY district_code DESC 
+LIMIT 500
+
+--********************************
+--WHERE
+
+/*
+* Cvičení: WHERE
+*/
+ 
+ 
+/*
+* Úkol 1: Vyberte z tabulky healthcare_provider všechny záznamy
+*  poskytovatelů zdravotních služeb, kteří poskytují služby v Praze (kraj Praha).
+* */
+SELECT * 
+FROM czechia_region cr 
+
+
+SELECT *
+FROM healthcare_provider hp 
+WHERE hp.region_code = 'CZ010'
+ 
+/*
+* Úkol 2: Vyberte ze stejné tabulky název a kontaktní informace poskytovatelů,
+*  kteří nemají místo poskytování v Praze (kraj Praha).
+*/
+ 
+ SELECT "name" AS jmeno
+	, phone AS telefon
+	, fax  
+	, email
+	, website AS web
+	, region_code
+FROM healthcare_provider hp 
+WHERE hp.region_code <> 'CZ010'
+	
+ 
+/*
+Úkol 3: Vypište názvy poskytovatelů, kódy krajů místa poskytování a
+místa sídla u takových poskytovatelů, u kterých se tyto hodnoty rovnají.
+*/
+ 
+ SELECT hp."name" 
+ , hp.residence_region_code 
+ , hp.region_code 
+ FROM  healthcare_provider hp 
+ WHERE hp.residence_region_code = hp.region_code
+ 
+ 
+-- Úkol 4: Vypište název a telefon takových poskytovatelů, kteří svůj telefon vyplnili do registru.
+ 
+ SELECT name
+ , phone
+ FROM healthcare_provider hp 
+ WHERE phone IS NOT null
+ 
+ 
+ 
+ 
+/*
+* Úkol 5: Vypište název poskytovatele a kód okresu u poskytovatelů, kteří mají místo poskytování služeb
+* v okresech Benešov a Beroun. Záznamy seřaďte vzestupně podle kódu okresu.
+*/
+--region = kraj
+--district = okres
+ 
+ SELECT * 
+FROM czechia_district cd  
+ 
+ SELECT name, hp.district_code 
+ FROM healthcare_provider hp 
+ WHERE hp.district_code = 'CZ0201' OR hp.district_code = 'CZ0202'
+ ORDER BY district_code ASC
+ 
+-- ekvivaletni zapis, vic optimalni
+ 
+SELECT name, hp.district_code 
+ FROM healthcare_provider hp 
+ WHERE hp.district_code IN('CZ0201', 'CZ0202')
+ ORDER BY district_code ASC
+
+
+
+-- Tvorba, úprava & vkládání do tabulek
+ 
+ 
+ 
+/*
+* Úkol 1: Vytvořte tabulku t_{jméno}_{příjmení}_providers_south_moravia z tabulky healthcare_provider
+*  vyberte pouze Jihomoravský kraj.
+*/
+ 
+-- snake case pojmenovani
+ 
+ SELECT * FROM czechia_region cr 
+ --CZ064
+ 
+ CREATE TABLE IF NOT EXISTS t_ondrej_simanek_providers_south_moravia AS 
+ SELECT *
+ FROM healthcare_provider hp 
+ WHERE hp.region_code = 'CZ064'
+ 
+ 
+SELECT * 
+FROM t_ondrej_simanek_providers_south_moravia
+ 
+ 
+/*
+Úkol 2: Vytvořte tabulku t_{jméno}_{příjmení}_resume, kde budou sloupce
+date_start, date_end, job, education. Sloupcům definujte vhodné datové typy.
+*/
+
+CREATE TABLE t_ondrej_simanek_resume
+(
+date_start date, --YYYY-mm-dd = 2025-06-11
+date_end date,
+job varchar(255),
+education varchar(255)
+)
+ 
+SELECT * FROM t_ondrej_simanek_resume
+ 
+--Úkol 3: Do tabulky t_{jméno}_{příjmení}_resume, kterou jste vytvořili v minulé části,
+--vložte záznam se svým současným zaměstnáním nebo studiem.
+ 
+ INSERT INTO t_ondrej_simanek_resume
+ VALUES ('2025-06-11', NULL, 'student', 'Engeto')
+ 
+ INSERT INTO t_ondrej_simanek_resume(date_start , date_end , job, education)
+ VALUES ('2025-06-11', '2026-01-01', 'student', 'Engeto')
+ 
+ UPDATE t_ondrej_simanek_resume
+ SET date_end = '2029-01-01'
+ WHERE date_end IS Null
+ 
+-- Úkol 4: K tabulce t_{jméno}_{příjmení}_resume přidejte dva sloupce:
+-- institution a role, které budou typu VARCHAR(255).
+ 
+ SELECT * FROM t_ondrej_simanek_resume
+ 
+ ALTER TABLE t_ondrej_simanek_resume
+ ADD COLUMN "institution" varchar(255),
+ ADD COLUMN "role" varchar(5)
+ 
+ 
+-- Úkol 5: Do tabulky t_{jméno}_{příjmení}_resume doplňte informace o tom, v jaké firmě nebo škole jste
+-- v daný čas působili (sloupec institution) a na jaké pozici (sloupec role).
+ 
+ SELECT * FROM t_ondrej_simanek_resume
+ 
+ UPDATE t_ondrej_simanek_resume
+ SET institution = 'UJEP'
+ WHERE job = 'student'
+ 
+ 
+--Úkol 6: Z tabulky t_{jméno}_{příjmení}_resume vymažte sloupce education a job.
+
+SELECT * FROM t_ondrej_simanek_resume
+
+ALTER TABLE t_ondrej_simanek_resume
+DROP COLUMN education
+
+--DROP -- mažeme celou tabulku i SCHEMA
+
+--DELETE -- maže data
+
+--DROP TABLE t_ondrej_simanek_resume
