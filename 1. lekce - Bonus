@@ -80,3 +80,39 @@ WHERE country = 'United Kingdom' OR country = 'France'
 ORDER BY date DESC
 
 --16. úkol: Vyberte z tabuky covid19_basic_differences přírůstky nakažených v České republice v září 2020.
+SELECT *
+FROM covid19_basic_differences cbd  
+
+SELECT *
+FROM covid19_basic_differences cbd 
+WHERE cbd.country = 'Czechia'
+AND date >= '2020-09-01'
+AND date <= '2020-09-30'
+
+--17. úkol: Z tabulky lookup_table zjistěte počet obyvatel Rakouska.
+SELECT * 
+FROM lookup_table lt 
+
+SELECT lt.country, lt.population 
+FROM lookup_table lt 
+WHERE country = 'Austria'
+
+--18. úkol: Z tabulky lookup_table vyberte jen země, které mají počet obyvatel větší než 500 milionů.
+SELECT lt.country, lt.population 
+FROM lookup_table lt 
+WHERE lt.population > 500000000
+
+--19. úkol: Zjistěte počet nakažených v Indii dne 30. srpna 2020 z tabulky covid19_basic.
+SELECT *
+FROM covid19_basic
+WHERE country = 'India'
+AND "date" = '2020-08-30'
+
+--20. úkol: Zjistěte počet nakažených na Floridě z tabulky covid19_detail_us dne 30. srpna 2020.
+SELECT * 
+FROM covid19_detail_us cdu 
+
+SELECT * 
+FROM covid19_detail_us cdu 
+WHERE cdu.province = 'Florida'
+AND date = '2020-08-30'
